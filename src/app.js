@@ -3,14 +3,13 @@ const morgan = require("morgan");
 const cors = require("cors");
 const helmet = require("helmet");
 const path = require("path");
-const { sequelize } = require("./db.js");
 const app = express();
 
 // Inicializar variables de entorno
 require("dotenv").config();
 
 // Iniciar base de datos
-require('./db.js');
+const { sequelize } = require('./db.js');
 
 // Configuración general
 
