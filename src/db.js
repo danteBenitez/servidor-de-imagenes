@@ -22,6 +22,6 @@ const sequelize = new Sequelize({
 sequelize.authenticate()
 .catch((e) => {
    console.log("Hubo un error al conectarse a la base de datos: ", e);
-})
+});
 
 module.exports =  { sequelize, DataTypes };
