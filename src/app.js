@@ -21,19 +21,26 @@ const PORT = process.env.PORT;
 
 // Motor de plantillas y carpeta views
 app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname, './src/views'));
+app.set('views', path.join(__dirname, './views'));
 
 // Middleware
 app.use(morgan('dev'));
+app.use(helmet({
+    contentSecurityPolicy: false
+}));
 app.use(cors());
-app.use(helmet());
 app.use(express.json());
+
+// Servidor de archivos estáticos
+app.use(express.static(path.join(__dirname, '../public')));
+console.log(path.join(__dirname, '../public'));
 
 // Middleware de subida de archivos
 app.use(fileUpload({
     debug: true, // Imprime en consola información sobre archivos subidos,
     useTempFiles: true, // No almacenamos los archivos recibidos en RAM, sino en /tmp
     tempFileDir: '../tmp',
+    createParentPath: true, // Crear el directorio de imágenes de no existir
     uploadTimeout: 30_000 // Esperar 30 segundos antes de abortar una petición 
 }));
 

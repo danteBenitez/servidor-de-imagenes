@@ -8,7 +8,7 @@ const {
 } = require('../controllers/upload.controllers.js');
 
 
-router.get('/', renderForm);
+router.get(['/', '/upload/local'], renderForm);
 
 // Rutas de API
 router.post('/api/images/local', uploadFileToServer);

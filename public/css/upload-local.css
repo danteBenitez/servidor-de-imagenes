@@ -1,0 +1,34 @@
+:root {
+    --clr-accent-400: #da5858;
+    --clr-accent-800: #db4848;
+}
+
+.submit-file input {
+    background-color: var(--clr-accent-400);
+    outline: none;
+    border: none;
+    margin: 0.3rem;
+    padding-inline: 0.9rem;
+    padding-block: 0.6rem;
+    color: white;
+    width: 100%;
+}
+
+input[type="file"]::file-selector-button {
+    background-color: var(--clr-accent-400);
+    border-width: 1px;
+    border: solid 1px grey; 
+    border-radius: 0.4rem;
+    color: white;
+    margin-inline: auto;
+    margin-block: .9rem;
+    display: block;
+    padding: 0.7rem;
+    transition: all 300ms ease-in;
+    cursor: pointer;
+}
+
+input[type="file"]::file-selector-button:hover {
+    background-color: var(--clr-accent-800);
+    color: white;
+}
