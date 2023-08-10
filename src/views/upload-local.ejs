@@ -14,7 +14,7 @@
             >
                 <label for="image" class="text-center form-label flex-fill fs-5">Seleccione una imagen: </label>
                 <div class="p-5 w-100 border border-info-subtle d-flex justify-content-center rounded-3">
-                    <input type="file" name="image" accept="image/png, image/jpeg" />
+                    <input type="file" name="image" accept="image/png, image/jpeg" multiple/>
                 </div>
                 <div class="submit-file mt-2 w-100">
                     <input type="submit" value="Enviar" class="rounded-3" />
@@ -31,5 +31,5 @@
     </article>
 
 </main>
-
+<script src="/js/upload-local.js"></script>
 <%- include('partials/footer.ejs') %>

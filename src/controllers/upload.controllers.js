@@ -15,33 +15,36 @@ async function uploadFileToServer(req, res) {
     const { files } = req;
 
     if (!files) throw { status: 400, message: "Debe enviar un archivo" };
-
-    const { image } = files;
-
-    if (!image || !isImage(image.name)) {
-      throw {
-        status: 400,
-        message: "Sólo se permiten subir imágenes",
-      };
-    }
-
-    image.mv(path.join(IMAGE_PATH, image.name), async (err) => {
-      if (err) {
-        console.error(err);
+    
+    for (const image of Object.values(files)) {
+      if (!image || !isImage(image.mimetype)) {
         throw {
-          status: 500,
-          message: "Error al subir el archivo",
+          status: 400,
+          message: "Sólo se permiten subir imágenes",
         };
       }
-      // Guardar nombre de la imagen en la BD
-      await Image.create({
-        url: image.name,
-        providerId: 1, // Registramos que es local
+  
+      image.mv(path.join(IMAGE_PATH, image.name), async (err) => {
+        if (err) {
+          console.error(err);
+          throw {
+            status: 500,
+            message: "Error al subir el archivo",
+          };
+        }
+        // Guardar nombre de la imagen en la BD
+        await Image.create({
+          url: image.name,
+          providerId: 1, // Registramos que es local
+        });
+  
+        res
+        .status(200)
+        .send({ message: "Archivo guardado exitosamente" });
       });
-
-      res.send(200, { message: "Archivo guardado exitosamente" });
-    });
+    }
   } catch (error) {
+    console.error(error);
     res.status(error.status || 500).send({
       message: error.message || "Error interno del servidor",
     });
@@ -49,21 +52,21 @@ async function uploadFileToServer(req, res) {
 }
 
 async function deleteLocalFile(req, res) {
-
   const { id } = req;
 
   try {
-
     const image = await Image.findByPk(id);
 
     if (!image) throw ({ status: 400, message: "La imagen a borrar no existe" });
 
+    await fs.rm(path.join(IMAGE_PATH, image.name))
+
     await image.destroy();
 
-    fs.rm()
-
   } catch(err) {
-
+    res.status(err.status || 500).send({
+      message: err.message || "Error interno del servidor"
+    });
   }
 
 

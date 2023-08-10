@@ -26,7 +26,8 @@ app.set('views', path.join(__dirname, './views'));
 // Middleware
 app.use(morgan('dev'));
 app.use(helmet({
-    contentSecurityPolicy: false
+    contentSecurityPolicy: false,
+    xContentTypeOptions: false,
 }));
 app.use(cors());
 app.use(express.json());
