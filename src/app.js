@@ -4,7 +4,7 @@ const cors = require("cors");
 const helmet = require("helmet");
 const path = require("path");
 const app = express();
-
+const fileUpload = require('express-fileupload');
 // Inicializar variables de entorno
 require("dotenv").config();
 
@@ -28,6 +28,14 @@ app.use(morgan('dev'));
 app.use(cors());
 app.use(helmet());
 app.use(express.json());
+
+// Middleware de subida de archivos
+app.use(fileUpload({
+    debug: true, // Imprime en consola información sobre archivos subidos,
+    useTempFiles: true, // No almacenamos los archivos recibidos en RAM, sino en /tmp
+    tempFileDir: '../tmp',
+    uploadTimeout: 30_000 // Esperar 30 segundos antes de abortar una petición 
+}));
 
 // Rutas 
 app.use(require('./routes/upload.routes.js'))
