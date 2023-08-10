@@ -11,8 +11,8 @@ const {
 router.get('/', renderForm);
 
 // Rutas de API
-router.get('/api/images/local', uploadFileToServer);
-router.get('/api/images/cloudinary', uploadFileToCloud);
-router.get('/api/')
+router.post('/api/images/local', uploadFileToServer);
+router.post('/api/images/cloudinary', uploadFileToCloud);
+router.post('/api/')
 
 module.exports = router;
