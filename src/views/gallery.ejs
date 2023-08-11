@@ -1,0 +1,31 @@
+<%- include('partials/header.ejs') %>
+<link rel="stylesheet" href="/css/gallery.css">
+<main>
+    <article>
+        <!-- Nav tabs -->
+        <nav class="d-flex justify-content-center gap-3 ">
+            <ul class="nav nav-tabs" id="myTab" role="tablist">
+              <li class="nav-item" role="presentation">
+                <a href="/" class="nav-link <%= provider_id == 1 ? 'active' : '' %>" role="tab">Local</a>
+              </li>
+              <li class="nav-item" role="presentation">
+                <a href="/cloudinary" class="nav-link <%= provider_id == 2 ? 'active' : '' %>" role="tab" >Cloudinary</a>
+              </li>
+            </ul>
+        </nav> 
+        <!-- Tab panes -->
+        <section class="m-5 d-flex justify-content-center align-items-center flex-column">
+        
+            <hgroup class="d-flex flex-column justify-content-center align-items-center">
+                <h1 class="display-1 fs-1 lead fw-bold text-accent">Galería de imágenes</h1>
+                <span class="display-6 fs-4"><%= provider %></span>
+                    
+            </hgroup>
+            <div class="p-5 d-flex flex-wrap w-100 gap-4" id="gallery" data-provider="<%= provider_id %>">
+
+            </div>
+        </section>
+    </article>
+</main>
+<script src="/js/gallery.js"></script>
+<%- include('partials/footer.ejs') %>
