@@ -17,6 +17,7 @@ async function uploadFileToServer(req, res) {
     if (!files) throw { status: 400, message: "Debe enviar un archivo" };
     
     for (const image of Object.values(files)) {
+
       if (!image || !isImage(image.mimetype)) {
         throw {
           status: 400,
@@ -86,6 +87,7 @@ async function uploadFileToCloud(req, res) {
         status: 400,
         message: "Sólo se permiten subir imágenes",
       };
+
     }
   } catch (error) {
     res.status(error.status || 500).send({
