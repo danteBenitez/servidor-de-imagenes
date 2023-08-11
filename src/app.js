@@ -40,7 +40,7 @@ console.log(path.join(__dirname, '../public'));
 app.use(fileUpload({
     debug: true, // Imprime en consola información sobre archivos subidos,
     useTempFiles: true, // No almacenamos los archivos recibidos en RAM, sino en /tmp
-    tempFileDir: '../tmp',
+    tempFileDir: path.join(__dirname, '../tmp'),
     createParentPath: true, // Crear el directorio de imágenes de no existir
     uploadTimeout: 30_000 // Esperar 30 segundos antes de abortar una petición 
 }));

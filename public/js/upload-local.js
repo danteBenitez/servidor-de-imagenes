@@ -7,10 +7,11 @@ form.addEventListener('submit', async (e) => {
 
     const formData = new FormData();
     try {
-        console.log(fileInput.files);
+        // Incluimos todos los archivos en la petición
         Array.from(fileInput.files).forEach(file => {
             formData.append(file.name, file);
-        })
+        });
+
         const response = await fetch('/api/images/local', {
             method: 'POST',
             body: formData
@@ -28,11 +29,13 @@ form.addEventListener('submit', async (e) => {
             window.location.assign('/');
         }, 500);
 
-    } catch(err) {
+    } catch(failedResponse) {
+        // Obtenemos el cuerpo de la petición para poder ver el mensaje de error
+        const body = await failedResponse?.json();
         Swal.fire({
           icon: "error",
           title: "Ocurrió un error",
-          text: err.message || "Error desconocido. Contacta a los desarrolladores del sitio",
+          text: failedResponse.message || body.message || "Error desconocido. Contacta a los desarrolladores del sitio",
         });
     }
 
