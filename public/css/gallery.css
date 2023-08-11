@@ -1,0 +1,17 @@
+.img-container { 
+  width: min-content;
+}
+
+.img-container img {
+    max-width: 15rem;
+    object-fit: contain;
+}
+
+.img-tooltip {
+  opacity: 0;
+  transition: all 300ms ease-in;
+}
+
+.img-tooltip:hover {
+  opacity: 1;
+}

@@ -4,4 +4,28 @@
 
     --clr-cloudinary-400: #3448c5;
     --clr-cloudinary-200: #5162d6;
+
 }
+
+.nav-link {
+    --bs-nav-link-color: var(--clr-accent-400);
+
+
+    --bs-nav-tabs-link-active-color: white;
+    --bs-nav-tabs-link-active-bg: var(--clr-accent-400);
+}
+.nav-link:hover {
+    --bs-nav-link-hover-color: var(--clr-accent-800);
+}
+
+.nav-pills {
+    --bs-nav-pills-link-active-bg: var(--clr-accent-400) !important;
+    --bs-nav-pills-link-active-color: white !important;
+    --bs-nav-pills-link-color: var(--clr-accent-400);
+    transition: all 300ms ease-in;
+}
+
+.text-accent {
+    color: var(--clr-accent-400);
+}
+

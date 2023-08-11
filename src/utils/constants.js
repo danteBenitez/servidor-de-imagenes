@@ -1,15 +1,18 @@
 // Una variable que almacena las rutas de la aplicación para mostrarlas en el navbar
-module.exports = [
+module.exports.PAGES = [
     {
-        name: "Galería",
-        url: "/"
+        text: "Galería",
+        url: "/",
+        id: "gallery"
     },
     {
-        name: "Subir",
-        url: "/upload/local"
+        text: "Subir",
+        url: "/upload/local",
+        id: "local"
     },
     {
-        name: "Subir con Cloudinary",
-        url: "/upload/cloudinary"
+        text: "Subir con Cloudinary",
+        url: "/upload/cloudinary",
+        id: "cloudinary"
     }
 ]

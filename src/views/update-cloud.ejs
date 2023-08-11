@@ -1,0 +1,47 @@
+<%- include('partials/header.ejs', { pages: pages }) %>
+<link rel="stylesheet" href="/css/upload.css">
+<link rel="stylesheet" href="/css/upload-cloud.css">
+<main class="p-5 d-flex flex-column justify-content-center gap-3">
+    <article class="d-flex justify-content-center align-content-center" >
+        <section class="d-flex justify-content-center align-items-center flex-column border-3 rounded-3 shadow p-sm-1 p-lg-4 p-md-2">
+            <hgroup class="fs-6 align-items-center justify-content-center d-flex gap-3 flex-wrap">
+                <div>
+                    <span class="text-danger fs-3 font-custom">upload</span>
+                    <span class="text-black fs-3 font-custom">Images</span>
+                </div>
+                <i class="bi bi-heart-fill fs-4 heart-icon"></i>
+                <img src="/img/cloudinary-logo.png" />
+            </hgroup>
+            <form 
+                action="/api/images/cloudinary 
+                method="post" enctype="multipart/form-data" 
+                class="p-3 w-75 d-flex align-items-center justify-content-center flex-column gap-2"
+                data-id="<%= id %>"
+                data-provider="2"
+            >
+                <label for="image" class="text-center form-label flex-fill fs-5">Seleccione una nueva imagen: </label>
+                <div class="p-5 w-100 border border-info-subtle d-flex justify-content-center rounded-3">
+                    <input type="file" name="image" accept="image/*" multiple/>
+                </div>
+                <div class="submit-file mt-2 w-100">
+                    <input type="submit" value="Enviar" class="rounded-3" />
+                </div>
+                <small class="text-center mt-2">
+                    Esta imagen se almacenará en los servidores de Cloudinary.
+                    Para usar nuestros propios servidores,
+                    <a href="/upload/local" class="">
+                        clic aquí.
+                    </a>
+                </small>
+            </form>
+        </section>
+    </article>
+    <article>
+    <section id="url-container" class="m-lg-5 m-md-3 m-sm-1">
+
+        </section>
+    </article>
+
+</main>
+<script src="/js/update-cloudinary.js"></script>
+<%- include('partials/footer.ejs') %>

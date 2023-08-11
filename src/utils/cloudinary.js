@@ -21,7 +21,7 @@ const { uploader } = cloudinary;
     Objeto retornado por cloudinary con información del archivo
     subido. 
 **/
-async function upload(file, publicId) {
+async function uploadToCloud(file, publicId) {
     // Obtenemos el path temporal al archivo para subirlo
     const tempPath = file.tempFilePath;
     console.log("Temp path of the file: ", tempPath);
@@ -32,7 +32,17 @@ async function upload(file, publicId) {
     });
 }
 
-module.exports = {
-    upload,
+/** Función que elimina un archivo de Cloudinary
 
+    @param {number} publicId ID del archivo
+    @return {Promise<any>}. Promesa que resuelve al resultado de la operación
+**/
+async function deleteFileFromCloud(publicId) {
+    return uploader.destroy(publicId);
+}
+
+
+module.exports = {
+    uploadToCloud,
+    deleteFileFromCloud
 }

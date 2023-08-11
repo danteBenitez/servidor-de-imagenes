@@ -2,6 +2,7 @@ const form = document.querySelector('form');
 const fileInput = document.querySelector('input[type=file]');
 
 form.addEventListener('submit', async (e) => {
+    const id = form.dataset.id;
     e.preventDefault();
 
     const formData = new FormData();
@@ -11,8 +12,8 @@ form.addEventListener('submit', async (e) => {
             formData.append(file.name, file);
         });
 
-        const response = await fetch(`/api/images/local/`, {
-            method: 'POST',
+        const response = await fetch(`/api/images/local/${id}`, {
+            method: 'PUT',
             body: formData
         });
 
