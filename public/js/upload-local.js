@@ -1,6 +1,6 @@
 const form = document.querySelector('form');
 const fileInput = document.querySelector('input[type=file]');
-console.log("Hello, world");
+
 form.addEventListener('submit', async (e) => {
     
     e.preventDefault();

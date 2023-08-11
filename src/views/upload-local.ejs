@@ -1,5 +1,5 @@
-<%- include('partials/header.ejs') %>
-<link rel="stylesheet" href="css/upload-local.css">
+<%- include('partials/header.ejs', { pages: pages }) %>
+<link rel="stylesheet" href="/css/upload.css">
 <main class="d-flex justify-content-center align-content-center p-5">
     <article>
         <section class="w-100 d-flex justify-content-center align-items-center flex-column border-3 rounded-3 shadow p-sm-1 p-lg-4 p-md-2">
@@ -14,7 +14,7 @@
             >
                 <label for="image" class="text-center form-label flex-fill fs-5">Seleccione una imagen: </label>
                 <div class="p-5 w-100 border border-info-subtle d-flex justify-content-center rounded-3">
-                    <input type="file" name="image" accept="image/png, image/jpeg" multiple/>
+                    <input type="file" name="image" accept="image/*" multiple/>
                 </div>
                 <div class="submit-file mt-2 w-100">
                     <input type="submit" value="Enviar" class="rounded-3" />

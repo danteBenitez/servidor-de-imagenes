@@ -2,12 +2,25 @@ const fs = require("fs/promises");
 const path = require("path");
 const Image = require("../models/image.js");
 const isImage = require("../utils/isImage.js");
+const { upload } = require("../utils/cloudinary.js");
+const PAGES = require('../utils/constants.js');
 
 // Directorio en el que guardar las imágenes subidas localmente
 const IMAGE_PATH = "./images/";
 
-function renderForm(_req, res) {
-  res.render("upload-local");
+// Vistas
+function renderFormLocal(_req, res) {
+  res.render("upload-local", {
+    pages: PAGES,
+    active: 'Subir'
+  });
+}
+
+function renderFormCloud(_req, res) {
+    res.render('upload-cloud', {
+      pages: PAGES,
+      active: "Subir con Cloudinary"
+    });
 }
 
 async function uploadFileToServer(req, res) {
@@ -80,15 +93,35 @@ async function uploadFileToCloud(req, res) {
 
     if (!files) throw { status: 400, message: "Debe enviar un archivo" };
 
-    const { image } = files;
+    let toSend = [];
+    for (const image of Object.values(files)) {
+        if (!image || !isImage(image.mimetype)) {
+          throw {
+            status: 400,
+            message: "Sólo se permiten subir imágenes",
+          };
+        }
 
-    if (!image || !isImage(image.name)) {
-      throw {
-        status: 400,
-        message: "Sólo se permiten subir imágenes",
-      };
+        const uploadedImage = await upload(image);
 
+        toSend.push({
+          image: image.name,
+          url: uploadedImage.url
+        });
+
+        await Image.create({
+          url: uploadedImage.url,
+          providerId: 2 // Indicar que proviene de Cloudinary
+        });
     }
+
+    res
+     .status(200)
+     .send({
+        uploaded: toSend, 
+        message: "Archivo/s subidos correctamente",
+    });
+
   } catch (error) {
     res.status(error.status || 500).send({
       message: error.message || "Error del servidor",
@@ -97,7 +130,8 @@ async function uploadFileToCloud(req, res) {
 }
 
 module.exports = {
-  renderForm,
+  renderFormLocal,
+  renderFormCloud,
   uploadFileToCloud,
   uploadFileToServer,
 };

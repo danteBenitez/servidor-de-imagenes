@@ -2,13 +2,15 @@ const { Router } = require('express');
 
 const router = Router();
 const {
-    renderForm, 
+    renderFormLocal, 
     uploadFileToCloud,
-    uploadFileToServer
+    uploadFileToServer,
+    renderFormCloud
 } = require('../controllers/upload.controllers.js');
 
-
-router.get(['/', '/upload/local'], renderForm);
+// Vistas
+router.get(['/', '/upload/local'], renderFormLocal);
+router.get('/upload/cloudinary', renderFormCloud);
 
 // Rutas de API
 router.post('/api/images/local', uploadFileToServer);
