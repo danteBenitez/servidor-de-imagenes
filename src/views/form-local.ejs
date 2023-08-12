@@ -7,10 +7,13 @@
                 <span class="text-danger fs-3 font-custom">upload</span>
                 <span class="text-black fs-3 font-custom">Images</span>
             </hgroup>
+            <!-- Esta variable nos permite utilizar la misma plantilla para actualizar que para subir -->
+            <% if (isUpdating) { %> 
+                <span class="lead fs-5 mx-auto">Está por reemplazar una imagen de nuestros servidores</span>
+            <% } %>
             <form 
-                action="/api/images/local" 
-                method="post" enctype="multipart/form-data" 
                 class="p-3 w-75 d-flex align-items-center justify-content-center flex-column gap-2"
+                data-id="<%= id %>"
             >
                 <label for="image" class="text-center form-label flex-fill fs-5">Seleccione una imagen: </label>
                 <div class="p-5 w-100 border border-info-subtle d-flex justify-content-center rounded-3">
@@ -31,5 +34,9 @@
     </article>
 
 </main>
-<script src="/js/upload-local.js"></script>
+<% if (!isUpdating) {  %>
+    <script src="/js/upload-local.js"></script>
+<% } else { %>
+    <script src="/js/update-local.js"></script>
+<% } %>
 <%- include('partials/footer.ejs') %>

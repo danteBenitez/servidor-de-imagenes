@@ -7,7 +7,6 @@ const {
   deleteFileFromCloud,
 } = require("../utils/cloudinary.js");
 const { PAGES } = require("../utils/constants.js");
-const { all } = require("../routes/upload.routes.js");
 
 // Directorio en el que guardar las imágenes subidas localmente
 const IMAGE_PATH = "./public/uploads/";
@@ -32,25 +31,39 @@ function renderCloudGallery(_req, res) {
 }
 
 function renderFormLocal(_req, res) {
-  res.render("upload-local", {
+  res.render("form-local", {
     pages: PAGES,
     active: "local",
+    isUpdating: false,
+    id: null
   });
 }
 
 function renderFormCloud(_req, res) {
-  res.render("upload-cloud", {
+  res.render("form-cloud", {
     pages: PAGES,
     active: "cloudinary",
+    isUpdating: false,
+    id: null
   });
 }
 
 function renderUpdateFormLocal(req, res) {
-  res.render("update-local", {
+  res.render("form-local", {
     pages: PAGES,
     active: "local",
     id: req.params.id,
+    isUpdating: true
   });
+}
+
+function renderUpdateFormCloud(req, res) {
+  res.render("form-cloud", {
+    pages: PAGES,
+    active: "cloudinary",
+    id: req.params.id,
+    isUpdating: true
+  })
 }
 
 async function uploadFileToServer(req, res) {
@@ -67,19 +80,24 @@ async function uploadFileToServer(req, res) {
         };
       }
 
-      image.mv(path.join(IMAGE_PATH, image.name), async (err) => {
+        // Guardar nombre de la imagen en la BD
+      const newImage = await Image.create({
+          url: image.name,
+          providerId: 1, // Registramos que es local
+        });
+
+      // Agregamos el ID al nombre del archivo para evitar sobreescrituras
+      image.mv(path.join(IMAGE_PATH, `${newImage.id}-${image.name}`), async (err) => {
         if (err) {
           console.error(err);
+          // En caso de error al mover el archivo, borramos el registro correspondiente
+          // de la base de datos (soft delete)
+          await newImage.destroy();
           throw {
             status: 500,
             message: "Error al subir el archivo",
           };
         }
-        // Guardar nombre de la imagen en la BD
-        await Image.create({
-          url: image.name,
-          providerId: 1, // Registramos que es local
-        });
 
         res.status(200).send({ message: "Archivo guardado exitosamente" });
       });
@@ -101,7 +119,14 @@ async function deleteFile(req, res) {
     if (!image) throw { status: 400, message: "La imagen a borrar no existe" };
 
     if (image.provider_id == 1) {
-      await fs.rm(path.join(IMAGE_PATH, image.name));
+      await fs.rm(path.join(IMAGE_PATH, `${image.id}-${image.url}`))
+        .catch(err => {
+          console.error(err);
+            throw {
+              status: 404,
+              message: "No se encontró ningún archivo con esa URL"
+            }
+      });
 
       await image.destroy();
     } else if (image.provider_id == 2) {
@@ -152,7 +177,7 @@ async function uploadFileToCloud(req, res) {
 
       toSend.push({
         image: image.name,
-        url: createdImage.url,
+        url: uploadedImage.url,
       });
     }
 
@@ -187,7 +212,7 @@ async function getAllImagesFromProvider(req, res) {
     // Añadimos el prefijo correcto en caso de ser un archivo local
     if (provider_id == 1) {
       allImages = allImages.map(({ id, url }) => ({
-        url: path.join("/uploads", url),
+        url: path.join("/uploads", `${id}-${url}`),
         id,
       }));
     } else {
@@ -232,9 +257,11 @@ async function updateLocalFile(req, res) {
       throw new Error("Imagen no encontrada");
     }
 
-    await fs.rm(path.join(IMAGE_PATH, oldImage.url));
+    await fs.rm(path.join(IMAGE_PATH, `${oldImage.id}-${oldImage.url}`)).then(
+      console.log
+    );
 
-    image.mv(path.join(IMAGE_PATH, image.name), async (err) => {
+    image.mv(path.join(IMAGE_PATH, `${id}-${image.name}`), async (err) => {
       if (err) {
         console.error(err);
         throw {
@@ -258,13 +285,61 @@ async function updateLocalFile(req, res) {
   }
 }
 
+async function updateCloudFile(req, res) {
+   const id = req.params.id;
+  try {
+    const { files } = req;
+
+    if (!files || Object.keys(files).length > 1) {
+      throw {
+        status: 400,
+        message: "Sólo es posible actualizar un archivo a la vez",
+      };
+    }
+    const image = Object.values(files)[0];
+
+    if (!image || !isImage(image.mimetype)) {
+      throw {
+        status: 400,
+        message: "Sólo se permiten subir imágenes",
+      };
+    }
+
+    const oldImage = await Image.findByPk(id);
+    if (!oldImage || oldImage.isLocalFile) {
+      throw {
+        status: 404,
+        message: "No existe una imagen en la nube con ese ID"
+      }
+    }
+
+    await deleteFileFromCloud(id);
+    const { url } = await uploadToCloud(image, id);
+
+    await oldImage.update({
+      url: url,
+      providerId: 2, 
+    });
+
+    res.status(200).send({ message: "Archivo guardado exitosamente" });
+  } catch (error) {
+    console.log(error);
+    res
+      .status(error.status || 500)
+      .send({ message: error.message || "Error interno del servidor" });
+  }
+}
+
 module.exports = {
   updateLocalFile,
+  updateCloudFile,
   renderLocalGallery,
   renderCloudGallery,
   renderFormLocal,
   renderFormCloud,
   renderUpdateFormLocal,
+  renderUpdateFormCloud,
+  renderFormCloud,
   renderFormLocal,
   uploadFileToCloud,
   uploadFileToServer,

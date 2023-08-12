@@ -58,16 +58,12 @@ async function showImages() {
           <i class="fs-3 bi bi-file-earmark-x text-white" onclick="deleteImage(${id})" role="button"></i>
           <span class="visually-hidden">Eliminar</span>
         </div>
-        ${
-          isLocal &&
-          `
         <div class="m-2 text-white text-center">
-          <a href="/update-local/${id}">
+          <a href="/update-${isLocal ? 'local' : 'cloudinary'}/${id}">
               <i class="fs-3 bi bi-pencil-fill text-white" role="button"></i>
               <span class="visually-hidden">Actualizar</span>
           </a>
-        </div>`
-        }
+        </div>
         <div class="m-2 text-white text-center">
           <a href="${url}">
               <i class="fs-3 bi bi-box-arrow-up-right text-white" role="button"></i>

@@ -12,10 +12,13 @@
                 <i class="bi bi-heart-fill fs-4 heart-icon"></i>
                 <img src="/img/cloudinary-logo.png" />
             </hgroup>
+            <!-- Esta variable nos permite utilizar la misma plantilla para actualizar que para subir -->
+            <% if (isUpdating) { %> 
+                <span class="lead fs-5 mx-auto">Está por reemplazar una imagen de Cloudinary</span>
+            <% } %>
             <form 
-                action="/api/images/cloudinary 
-                method="post" enctype="multipart/form-data" 
                 class="p-3 w-75 d-flex align-items-center justify-content-center flex-column gap-2"
+                data-id="<%= id %>"
             >
                 <label for="image" class="text-center form-label flex-fill fs-5">Seleccione una imagen: </label>
                 <div class="p-5 w-100 border border-info-subtle d-flex justify-content-center rounded-3">
@@ -35,11 +38,15 @@
         </section>
     </article>
     <article>
-    <section id="url-container" class="m-lg-5 m-md-3 m-sm-1">
+        <section id="url-container" class="m-lg-5 m-md-3 m-sm-1">
 
         </section>
     </article>
 
 </main>
-<script src="/js/upload-cloudinary.js"></script>
+<% if (!isUpdating) {  %>
+    <script src="/js/upload-cloudinary.js"></script>
+<% } else { %>
+    <script src="/js/update-cloudinary.js"></script>
+<% } %>
 <%- include('partials/footer.ejs') %>

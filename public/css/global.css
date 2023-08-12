@@ -10,7 +10,6 @@
 .nav-link {
     --bs-nav-link-color: var(--clr-accent-400);
 
-
     --bs-nav-tabs-link-active-color: white;
     --bs-nav-tabs-link-active-bg: var(--clr-accent-400);
 }
