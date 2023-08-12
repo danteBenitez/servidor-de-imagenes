@@ -1,7 +1,9 @@
 const form = document.querySelector('form');
 const fileInput = document.querySelector('input[type=file]');
-console.log("This only exists here...")
+const submitButton = document.querySelector('input[type=submit]');
+
 form.addEventListener('submit', async (e) => {
+    submitButton.value = 'Enviando...';
     const id = form.dataset.id;
     e.preventDefault();
 
@@ -38,7 +40,5 @@ form.addEventListener('submit', async (e) => {
           text: failedResponse.message || body.message || "Error desconocido. Contacta a los desarrolladores del sitio",
         });
     }
-
-
-
+    submitButton.value = "Enviar";
 })

@@ -1,9 +1,10 @@
 const form = document.querySelector('form');
 const fileInput = document.querySelector('input[type=file]');
 const urlContainer = document.querySelector('#url-container');
+const submitButton = document.querySelector('input[type=submit]');
 
 form.addEventListener('submit', async (e) => {
-    
+    submitButton.value = "Enviando...";
     e.preventDefault();
 
     const formData = new FormData();
@@ -41,6 +42,7 @@ form.addEventListener('submit', async (e) => {
           text: failedResponse.message || body.message || "Error desconocido. Contacta a los desarrolladores del sitio",
         });
     }
+    submitButton.value = "Enviar";
 });
 
 function showUrls(images) {

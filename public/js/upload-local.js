@@ -1,7 +1,9 @@
 const form = document.querySelector('form');
 const fileInput = document.querySelector('input[type=file]');
+const submitButton = document.querySelector('input[type=submit]');
 
 form.addEventListener('submit', async (e) => {
+    submitButton.value = 'Enviando...';
     e.preventDefault();
 
     const formData = new FormData();
@@ -20,7 +22,7 @@ form.addEventListener('submit', async (e) => {
 
         await Swal.fire({
             icon: 'success',
-            title: 'el archivo se envío correctamente',
+            title: 'El archivo se envío correctamente',
             text: 'redireccionándolo a la página principal'
         });
 
@@ -37,7 +39,5 @@ form.addEventListener('submit', async (e) => {
           text: failedResponse.message || body.message || "Error desconocido. Contacta a los desarrolladores del sitio",
         });
     }
-
-
-
+    submitButton.value = 'Enviar'
 })
